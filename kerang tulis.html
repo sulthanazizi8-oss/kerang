@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Animasi Kanji Kai (Kerang) - Presisi Sumber</title>
+    <style>
+        /* Tampilan minimalis: background putih polos, tanpa tombol, looping */
+        body { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            background-color: #ffffff; 
+            margin: 0;
+            overflow: hidden;
+        }
+
+        svg { 
+            width: 400px; 
+            height: 400px; 
+        }
+
+        path { 
+            fill: none; 
+            stroke: #000000; /* Hitam pekat sesuai permintaan */
+            stroke-width: 5; 
+            stroke-linecap: round; 
+            stroke-linejoin: round; 
+        }
+        
+        /* Gaya Nomor Urutan Penulisan agar tidak tertutup garis */
+        text { 
+            font-size: 7.5px; 
+            font-weight: bold; 
+            fill: #000000; 
+            opacity: 0; 
+            transition: opacity 0.3s; 
+            font-family: Arial, sans-serif;
+        }
+
+        .show-num { opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <svg viewBox="0 0 100 100" id="kanji-svg">
+        <!-- 7 Guratan Kanji Kai (貝) Berdasarkan Gambar Sumber [1] -->
+        <path id="p1" d="M22,10 L22,65" />          <!-- 1: Sisi kiri (Merah) -->
+        <path id="p2" d="M22,10 L68,8 L68,63" />    <!-- 2: Atas & kanan (Cokelat) -->
+        <path id="p3" d="M22,28 L68,26" />          <!-- 3: Horisontal tengah 1 (Zaitun) -->
+        <path id="p4" d="M22,46 L68,44" />          <!-- 4: Horisontal tengah 2 (Hijau Muda) -->
+        <path id="p5" d="M22,64 L68,62" />          <!-- 5: Horisontal bawah kotak (Hijau) -->
+        <path id="p6" d="M33,70 Q25,80 10,88" />    <!-- 6: Kaki kiri (Hijau Terang) -->
+        <path id="p7" d="M57,70 Q65,80 78,88" />    <!-- 7: Kaki kanan (Teal) -->
+
+        <!-- Penempatan nomor urutan sesuai posisi pada gambar sumber [1] -->
+        <text x="14" y="18" id="n1">1</text>
+        <text x="25" y="8" id="n2">2</text>
+        <text x="25" y="26" id="n3">3</text>
+        <text x="25" y="44" id="n4">4</text>
+        <text x="25" y="62" id="n5">5</text>
+        <text x="18" y="75" id="n6">6</text>
+        <text x="48" y="75" id="n7">7</text>
+    </svg>
+
+    <script>
+        const totalStrokes = 7;
+
+        function animateLoop() {
+            // 1. Reset awal: Sembunyikan semua guratan dan nomor
+            for (let i = 1; i <= totalStrokes; i++) {
+                const path = document.getElementById(`p${i}`);
+                const num = document.getElementById(`n${i}`);
+                const length = path.getTotalLength();
+                
+                path.style.transition = 'none';
+                path.style.strokeDasharray = length;
+                path.style.strokeDashoffset = length;
+                num.classList.remove('show-num');
+            }
+
+            // 2. Jalankan animasi menulis berurutan 1 sampai 7
+            let delay = 300; 
+            for (let i = 1; i <= totalStrokes; i++) {
+                setTimeout(() => {
+                    const path = document.getElementById(`p${i}`);
+                    const num = document.getElementById(`n${i}`);
+                    
+                    num.classList.add('show-num'); 
+                    path.style.transition = 'stroke-dashoffset 0.8s ease-in-out';
+                    path.style.strokeDashoffset = '0';
+                }, delay);
+                
+                delay += 1000; 
+            }
+
+            // 3. Mengulang animasi secara otomatis (looping)
+            setTimeout(animateLoop, delay + 2500);
+        }
+
+        window.onload = animateLoop;
+    </script>
+</body>
+</html>
